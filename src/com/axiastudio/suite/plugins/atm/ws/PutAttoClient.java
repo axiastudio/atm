@@ -94,10 +94,14 @@ public class PutAttoClient extends ATMClient {
 	private String getAttoFromMap(Map attoMap) {
 		StringBuffer json = new StringBuffer();
 
+		boolean bAltroEnteAtto = false;
+		String sAltroEnteAtto = (String)attoMap.get("s_altroenteatto");
+		if (!"".equals(sAltroEnteAtto)) {
+			bAltroEnteAtto = true;
+		}
+		
 		json.append("{\"d_dataatto\":\"")
 				.append(formatDate((Date) attoMap.get("d_dataatto")))
-				.append("\",\"s_numeroatto\":\"")
-				.append(attoMap.get("s_numeroatto"))
 				.append("\",\"d_datapubblicazioneatto\":\"")
 				.append(formatDate((Date) attoMap
 						.get("d_datapubblicazioneatto")))
@@ -113,12 +117,17 @@ public class PutAttoClient extends ATMClient {
 				.append((String) attoMap.get("s_tipoatto"))
 				.append("\",\"s_statoatto\":\"")
 				.append((String) attoMap.get("s_statoatto"))
-				.append("\",\"s_estensioneatto\":\"").append("pdf")
-				.append("\",\"b_peraltroenteatto\":\"false\"")
-				.append(",\"b_immediatoatto\":\"true\"");
+				.append("\",\"b_peraltroenteatto\":\"").append(bAltroEnteAtto).append("\"")
+				.append(",\"s_altroenteatto\":\"").append(sAltroEnteAtto)
+				.append("\",\"b_immediatoatto\":\"true\"");
 
 		if (attoMap.containsKey("f_fileatto")) {
-			json.append(",\"f_fileatto\":\"").append((String)attoMap.get("f_fileatto")).append("\"");
+			json.append("\",\"s_estensioneatto\":\"").append((String)attoMap.get("s_estensioneatto"))
+				.append(",\"f_fileatto\": ").append((String)attoMap.get("f_fileatto"));
+		}
+		
+		if (attoMap.containsKey("s_allegati")) {
+			json.append(",\"s_allegati\": ").append((String)attoMap.get("s_allegati"));
 		}
 		
 		json.append("}");
