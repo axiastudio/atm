@@ -17,16 +17,13 @@ public class ATMClient {
 	public static final String PASSWORD = "password";
 	public static final String ENDPOINT = "endpoint";
 
-	protected String wsakey = "*";
-	protected String userID = "*";
-	protected String MAC = "*";
-	protected String password = "*";
-	protected String endpoint = "";
+	protected String wsakey;
+	protected String userID;
+	protected String MAC;
+	protected String password;
+	protected String endpoint;
 
 	public ATMClient() {
-
-		bindService();
-
 	}
 
 	public void bindService() {
