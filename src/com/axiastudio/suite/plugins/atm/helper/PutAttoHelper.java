@@ -39,7 +39,7 @@ public class PutAttoHelper {
 		context.put(ATMClient.WSAKEY, wsakey);
 		context.put(ATMClient.ENDPOINT, endpoint);
 	}
-	
+
 	public PutAttoClient getPutAttoClientInstance() {
 		if (pac == null) {
 			if (context == null) {
@@ -52,9 +52,10 @@ public class PutAttoHelper {
 	}
 
 	public void putAtto(PubblicazioneATM pubblicazione, List<AllegatoATM> files) {
-		
-		Map<String, Object> atto = fillAttoFromPubblicazione(pubblicazione, files);
-		
+
+		Map<String, Object> atto = fillAttoFromPubblicazione(pubblicazione,
+				files);
+
 		try {
 
 			getPutAttoClientInstance().putAtto(atto);
@@ -63,15 +64,14 @@ public class PutAttoHelper {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	public void putAtto(PubblicazioneATM pubblicazione) {
 
 		putAtto(pubblicazione, null);
 
 	}
-
 
 	private Map<String, Object> fillAttoFromPubblicazione(
 			PubblicazioneATM pubblicazione, List<AllegatoATM> files) {
@@ -90,11 +90,10 @@ public class PutAttoHelper {
 
 		atto.put("s_altroenteatto", pubblicazione.getRichiedente());
 
-
-        if (files != null) {
+		if (files != null) {
 			atto.put("s_allegati", marshalingFiles(files));
 		}
-		
+
 		return atto;
 	}
 
@@ -105,35 +104,38 @@ public class PutAttoHelper {
 	 */
 	private String marshalingFiles(List<AllegatoATM> files) {
 		StringBuffer marshaledFile = new StringBuffer();
-		
+
 		if (files.size() == 0) {
 			return "{}";
 		}
 
 		marshaledFile.append("[");
-		
-		for(Iterator<AllegatoATM> i = files.iterator(); i.hasNext();) {
+
+		for (Iterator<AllegatoATM> i = files.iterator(); i.hasNext();) {
 			AllegatoATM a = i.next();
 			File f = a.getFileallegato();
-			String fileExtension = f.getName().substring(f.getName().indexOf('.')+1);
-			
+			String fileExtension = f.getName().substring(
+					f.getName().indexOf('.') + 1);
+
 			try {
 
 				byte[] buffer = new byte[(int) f.length()];
-				DataInputStream dis = new DataInputStream(new FileInputStream(f));
+				DataInputStream dis = new DataInputStream(
+						new FileInputStream(f));
 				dis.read(buffer);
 				dis.close();
 
 				marshaledFile.append("{\"s_titoloallegato\":\"")
-					.append(a.getTitoloallegato())
-					.append("\",\"s_estensioneallegato\":\"")
-					.append(fileExtension).append("\",\"f_fileallegato\":\"")
-					.append(Base64.encode(buffer)).append("\"}");
-				
+						.append(a.getTitoloallegato())
+						.append("\",\"s_estensioneallegato\":\"")
+						.append(fileExtension)
+						.append("\",\"f_fileallegato\":\"")
+						.append(Base64.encode(buffer)).append("\"}");
+
 				if (i.hasNext()) {
 					marshaledFile.append(",");
 				}
-				
+
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -143,12 +145,12 @@ public class PutAttoHelper {
 			}
 
 		}
-		
+
 		marshaledFile.append("]");
-		
+
 		System.out.println("JSON File allegati:\n" + marshaledFile.toString());
-		
+
 		return marshaledFile.toString();
 	}
-	
+
 }
