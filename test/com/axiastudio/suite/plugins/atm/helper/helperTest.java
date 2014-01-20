@@ -18,43 +18,40 @@ import java.util.Locale;
 import java.util.Properties;
 
 /**
- * User: tiziano
- * Date: 20/01/14
- * Time: 19:38
+ * User: tiziano Date: 20/01/14 Time: 19:38
  */
 public class helperTest {
 
-    @Test
-    public void testPutAtto() throws Exception {
+	@Test
+	public void testPutAtto() throws Exception {
 
-        Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
-        Date oggi = calendar.getTime();
+		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
+		Date oggi = calendar.getTime();
 
-        PubblicazioneATM p = new PubblicazioneATM();
-        p.setTitolo("Primo tentativo");
-        p.setDescrizione("Primo tentativo di inserimento su Albo");
-        p.setInizioconsultazione(oggi);
-        p.setDurataconsultazione(10);
-        p.setRichiedente("Comune di Riva del Garda");
-        p.setTipoatto("Determine");
+		PubblicazioneATM p = new PubblicazioneATM();
+		p.setTitolo("Primo tentativo");
+		p.setDescrizione("Primo tentativo di inserimento su Albo");
+		p.setInizioconsultazione(oggi);
+		p.setDurataconsultazione(10);
+		p.setRichiedente("Comune di Riva del Garda");
+		p.setTipoatto("Determine");
 
-        PutAttoHelper helper = new PutAttoHelper();
-        
-        Properties ctx = loadConfig();
-        
+		PutAttoHelper helper = new PutAttoHelper();
+
+		Properties ctx = loadConfig();
+
 		helper.setup(ctx.getProperty(ATMClient.USER_ID),
 				ctx.getProperty(ATMClient.PASSWORD),
 				ctx.getProperty(ATMClient.MAC_NAME),
 				ctx.getProperty(ATMClient.WSAKEY),
 				ctx.getProperty(ATMClient.ENDPOINT));
 
-        helper.putAtto(p);
+		helper.putAtto(p);
 
+	}
 
-    }
-
-    private Properties loadConfig() {
-    	Properties p = new Properties();
+	private Properties loadConfig() {
+		Properties p = new Properties();
 
 		try {
 			p.load(getClass().getResourceAsStream("putatto.properties"));
@@ -62,47 +59,47 @@ public class helperTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return p;
-		
+
 	}
 
 	@Test
-    public void testPutAttoAllegato() throws Exception {
-    
-    	Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
-        Date oggi = calendar.getTime();
+	public void testPutAttoAllegato() throws Exception {
 
-        PubblicazioneATM p = new PubblicazioneATM();
-        p.setTitolo("Primo tentativo");
-        p.setDescrizione("Primo tentativo di inserimento su Albo");
-        p.setInizioconsultazione(oggi);
-        p.setDurataconsultazione(10);
-        p.setRichiedente("Comune di Riva del Garda");
-        p.setTipoatto("Determine");
+		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
+		Date oggi = calendar.getTime();
 
-        PutAttoHelper helper = new PutAttoHelper();
-        
-        Properties ctx = loadConfig();
-        
+		PubblicazioneATM p = new PubblicazioneATM();
+		p.setTitolo("Primo tentativo");
+		p.setDescrizione("Primo tentativo di inserimento su Albo");
+		p.setInizioconsultazione(oggi);
+		p.setDurataconsultazione(10);
+		p.setRichiedente("Comune di Riva del Garda");
+		p.setTipoatto("Determine");
+
+		PutAttoHelper helper = new PutAttoHelper();
+
+		Properties ctx = loadConfig();
+
 		helper.setup(ctx.getProperty(ATMClient.USER_ID),
 				ctx.getProperty(ATMClient.PASSWORD),
 				ctx.getProperty(ATMClient.MAC_NAME),
 				ctx.getProperty(ATMClient.WSAKEY),
 				ctx.getProperty(ATMClient.ENDPOINT));
-        
-        List<AllegatoATM> allegati = new ArrayList<AllegatoATM>();
-        
-        AllegatoATM allegato = new AllegatoATM();
-        allegato.setTitoloallegato("Allegato di prova");
-        
-        allegato.setFileallegato(new File("allegato.txt"));
-        
-        allegati.add(allegato);
-        
-        helper.putAtto(p, allegati);
-        
-        Assert.assertTrue(true);
-        
-    }
+
+		List<AllegatoATM> allegati = new ArrayList<AllegatoATM>();
+
+		AllegatoATM allegato = new AllegatoATM();
+		allegato.setTitoloallegato("Allegato di prova");
+
+		allegato.setFileallegato(new File("allegato.txt"));
+
+		allegati.add(allegato);
+
+		helper.putAtto(p, allegati);
+
+		Assert.assertTrue(true);
+
+	}
 }
