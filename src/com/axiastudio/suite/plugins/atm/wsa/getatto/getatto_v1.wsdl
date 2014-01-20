@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions name="getatto_v1" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:wsdl = "http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://tempuri.org/encodedTypes" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://tempuri.org/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <message name="getToken_request">
+        <part type="xsd:string" name="code"/>
+        <part type="xsd:string" name="userid"/>
+    </message>
+    <message name="getToken_response">
+        <part type="xsd:string" name="return"/>
+    </message>
+    <message name="getAttoList_request">
+        <part type="xsd:string" name="filter"/>
+        <part type="xsd:string" name="token"/>
+    </message>
+    <message name="getAttoList_response">
+        <part type="xsd:string" name="return"/>
+    </message>
+    <message name="getAttoInfo_request">
+        <part type="xsd:string" name="attoid"/>
+        <part type="xsd:string" name="info_req"/>
+        <part type="xsd:string" name="token"/>
+    </message>
+    <message name="getAttoInfo_response">
+        <part type="xsd:string" name="return"/>
+    </message>
+    <message name="getAllegatoList_request">
+        <part type="xsd:string" name="attoid"/>
+        <part type="xsd:string" name="token"/>
+    </message>
+    <message name="getAllegatoList_response">
+        <part type="xsd:string" name="return"/>
+    </message>
+    <message name="getAllegatoInfo_request">
+        <part type="xsd:string" name="allegatoid"/>
+        <part type="xsd:string" name="info_req"/>
+        <part type="xsd:string" name="token"/>
+    </message>
+    <message name="getAllegatoInfo_response">
+        <part type="xsd:string" name="return"/>
+    </message>
+    <portType name="getAttoPortType">
+        <operation name="getToken">
+            <input message="tns:getToken_request" />
+            <output message="tns:getToken_response" />
+        </operation>
+        <operation name="getAttoList">
+            <input message="tns:getAttoList_request" />
+            <output message="tns:getAttoList_response" />
+        </operation>
+        <operation name="getAttoInfo">
+            <input message="tns:getAttoInfo_request" />
+            <output message="tns:getAttoInfo_response" />
+        </operation>
+        <operation name="getAllegatoList">
+            <input message="tns:getAttoList_request" />
+            <output message="tns:getAttoList_response" />
+        </operation>
+        <operation name="getAllegatoInfo">
+            <input message="tns:getAttoInfo_request" />
+            <output message="tns:getAttoInfo_response" />
+        </operation>
+    </portType>
+	<binding name="getAttoBinding" type="tns:getAttoPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="getToken">
+            <soap:operation soapAction="" />
+            <input>
+				<soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></soap:body>
+            </input>
+            <output>
+				<soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"></soap:body>
+            </output>
+        </operation>
+        <operation name="getAttoList">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="getAttoInfo">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="getAllegatoList">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="getAllegatoInfo">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+    </binding>
+	<documentation>SERVIZIO GETATTO</documentation>
+    <service name="getAttoService">
+        <port name="getAttoPort" binding="tns:getAttoBinding">
+            <soap:address location="http://194.105.52.153/_wsa-t/getatto_v1.php"/>
+        </port>
+    </service>
+</definitions>

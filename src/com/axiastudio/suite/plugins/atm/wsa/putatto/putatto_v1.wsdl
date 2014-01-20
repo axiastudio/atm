@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions name="putatto_v1" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:wsdl = "http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:s0="http://tempuri.org/encodedTypes" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://tempuri.org/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://tempuri.org/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <message name="getToken_request">
+        <part type="xsd:string" name="code"/>
+        <part type="xsd:string" name="userid"/>
+    </message>
+    <message name="getToken_response">
+        <part type="xsd:string" name="return"/>
+    </message>
+    <message name="putAtto_request">
+        <part type="xsd:string" name="apar"/>
+        <part type="xsd:string" name="token"/>
+    </message>
+    <message name="putAtto_response">
+        <part type="xsd:string" name="return"/>
+    </message>
+    <portType name="putAttoPortType">
+        <operation name="getToken">
+            <input message="tns:getToken_request" />
+            <output message="tns:getToken_response" />
+        </operation>
+        <operation name="putAtto">
+            <input message="tns:putAtto_request" />
+            <output message="tns:putAtto_response" />
+        </operation>
+    </portType>
+	<binding name="putAttoBinding" type="tns:putAttoPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http" />
+        <operation name="getToken">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+        <operation name="putAtto">
+            <soap:operation soapAction="" />
+            <input>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </input>
+            <output>
+                <soap:body namespace="" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" />
+            </output>
+        </operation>
+    </binding>
+	<documentation>SERVIZIO PUTATTO</documentation>
+    <service name="putAttoService_v1_0">
+        <port name="putAttoPort" binding="tns:putAttoBinding">
+            <soap:address location="http://194.105.52.153/_wsa-t/putatto_v1.php"/>
+        </port>
+    </service>
+</definitions>
