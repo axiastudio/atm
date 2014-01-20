@@ -12,6 +12,7 @@ import java.util.Map;
 
 import com.axiastudio.suite.plugins.atm.AllegatoATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
+import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 import com.axiastudio.suite.plugins.atm.ws.PutAttoClient;
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
@@ -26,17 +27,25 @@ public class PutAttoHelper {
 			"peraltroenteatto", "altroenteatto", "enteatto", "entedescatto",
 			"annoatto", "numeroallegatiatto" };
 
+	private Map<String, String> context = null;
 	private static PutAttoClient pac = null;
 
+	public void setup(String userid, String password, String mac,
+			String wsakey, String endpoint) {
+		context = new HashMap<String, String>();
+		context.put(ATMClient.USER_ID, userid);
+		context.put(ATMClient.PASSWORD, password);
+		context.put(ATMClient.MAC_NAME, mac);
+		context.put(ATMClient.WSAKEY, wsakey);
+		context.put(ATMClient.ENDPOINT, endpoint);
+	}
+	
 	public PutAttoClient getPutAttoClientInstance() {
 		if (pac == null) {
-			Map<String, String> context = new HashMap<String, String>();
-			context.put("wsakey", "*");
-			context.put("userID", "*");
-			context.put("password", "*");
-			context.put("MAC", "*");
-			context.put("endpoint",
-					"http://194.105.52.153/_wsa-t/putatto_v1.php");
+			if (context == null) {
+				System.err.println("Please call setup first");
+				return null;
+			}
 			pac = new PutAttoClient(context);
 		}
 		return pac;
@@ -69,41 +78,27 @@ public class PutAttoHelper {
 
 		Map<String, Object> atto = new HashMap<String, Object>();
 
-		/**
-		 * TODO manca valore (deve essere la data di protocollazione dell'atto)
-		 */
 		atto.put("d_dataatto", pubblicazione.getInizioconsultazione());
 
-		/**
-		 * TODO manca valore
-		 */
 		atto.put("n_durataatto", pubblicazione.getDurataconsultazione());
 
-		// atto.put("s_titoloatto", pubblicazione.getTitolo());
+		atto.put("s_titoloatto", pubblicazione.getTitolo());
 
-		/**
-		 * TODO verificare se corretto
-		 */
 		atto.put("s_oggettoatto", pubblicazione.getDescrizione());
 
-		/**
-		 * TODO manca valore
-		 */
 		atto.put("s_tipoatto", pubblicazione.getTipoatto());
 
-		// atto.put("s_statoatto", "pubblicazione");
+		atto.put("s_altroenteatto", pubblicazione.getRichiedente());
 
 
         if (files != null) {
-			atto.put("f_fileatto", marshalingFiles(files));
+			atto.put("s_allegati", marshalingFiles(files));
 		}
 		
 		return atto;
 	}
 
 	/**
-	 * The WS actualli accept only one file, but we are readi to handle
-	 * a list for furter versions.
 	 * 
 	 * @param files
 	 * @return
@@ -112,17 +107,15 @@ public class PutAttoHelper {
 		StringBuffer marshaledFile = new StringBuffer();
 		
 		if (files.size() == 0) {
-			return "";
+			return "{}";
 		}
 
+		marshaledFile.append("[");
+		
 		for(Iterator<AllegatoATM> i = files.iterator(); i.hasNext();) {
-            AllegatoATM a = i.next();
+			AllegatoATM a = i.next();
 			File f = a.getFileallegato();
-			String fileExtension = f.getName().substring(f.getName().indexOf('.'));
-			
-			marshaledFile.append("{\"s_titoloallegato\":\"").append(a.getTitoloallegato())
-				.append("\",\"s_estensioneallegato\":\"").append(fileExtension)
-				.append("\",\"f_fileallegato\":\"");
+			String fileExtension = f.getName().substring(f.getName().indexOf('.')+1);
 			
 			try {
 
@@ -130,8 +123,16 @@ public class PutAttoHelper {
 				DataInputStream dis = new DataInputStream(new FileInputStream(f));
 				dis.read(buffer);
 				dis.close();
+
+				marshaledFile.append("{\"s_titoloallegato\":\"")
+					.append(a.getTitoloallegato())
+					.append("\",\"s_estensioneallegato\":\"")
+					.append(fileExtension).append("\",\"f_fileallegato\":\"")
+					.append(Base64.encode(buffer)).append("\"}");
 				
-				marshaledFile.append(Base64.encode(buffer)).append("\"}");
+				if (i.hasNext()) {
+					marshaledFile.append(",");
+				}
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -140,9 +141,12 @@ public class PutAttoHelper {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			break;
+
 		}
+		
+		marshaledFile.append("]");
+		
+		System.out.println("JSON File allegati:\n" + marshaledFile.toString());
 		
 		return marshaledFile.toString();
 	}
