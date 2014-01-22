@@ -95,10 +95,11 @@ public class PutAttoClient extends ATMClient {
 		StringBuffer json = new StringBuffer();
 
 		boolean bAltroEnteAtto = false;
-		String sAltroEnteAtto = (String) attoMap.get("s_altroenteatto");
-		if (!"".equals(sAltroEnteAtto)) {
-			bAltroEnteAtto = true;
-		}
+		String sAltroEnteAtto = "";
+//		String sAltroEnteAtto = (String) attoMap.get("s_altroenteatto");
+//		if (sAltroEnteAtto != null && !"".equals(sAltroEnteAtto)) {
+//			bAltroEnteAtto = true;
+//		}
 
 		json.append("{\"d_dataatto\":\"")
 				.append(formatDate((Date) attoMap.get("d_dataatto")))
@@ -116,7 +117,7 @@ public class PutAttoClient extends ATMClient {
 				.append("\",\"s_tipoatto\":\"")
 				.append((String) attoMap.get("s_tipoatto"))
 				.append("\",\"s_statoatto\":\"")
-				.append((String) attoMap.get("s_statoatto"))
+				.append("pubblicazione")
 				.append("\",\"b_peraltroenteatto\":\"").append(bAltroEnteAtto)
 				.append("\"").append(",\"s_altroenteatto\":\"")
 				.append(sAltroEnteAtto)
