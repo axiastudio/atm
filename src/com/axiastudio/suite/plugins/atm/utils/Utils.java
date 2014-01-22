@@ -101,6 +101,12 @@ public class Utils {
 		return String.format(error, code, description);
 	}
 
+	/**
+	 * TODO ora non funziona.
+	 * 
+	 * @param jsonObject
+	 * @return
+	 */
 	public static GetAttoInfo buildGetAttoInfoFromJSON(JSONObject jsonObject) {
 		GetAttoInfo gai = new GetAttoInfo();
 		
