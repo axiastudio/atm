@@ -1,8 +1,6 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
 import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -114,7 +112,7 @@ public class PutAttoHelper {
 		for (Iterator<AllegatoATM> i = files.iterator(); i.hasNext();) {
 			AllegatoATM a = i.next();
 			String fileExtension = a.getFileallegatoname().substring(
-					a.getFileallegatoname().indexOf('.') + 1);
+					a.getFileallegatoname().indexOf('.'));
 
 			try {
 
