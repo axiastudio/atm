@@ -19,14 +19,14 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class PutAttoHelper {
 
-	private static final String[] attoAttributes = new String[] { "dataatto",
+	/*private static final String[] attoAttributes = new String[] { "dataatto",
 			"numeroatto", "datapubblicazioneatto", "datascadenzaatto",
 			"durataatto", "titoloatto", "oggettoatto", "tipoatto", "fileatto",
 			"statoatto", "dataannullamentoatto", "motivoannullamentoatto",
 			"responsabileatto", "progressivoatto", "datarevocaatto",
 			"peraltroenteatto", "altroenteatto", "enteatto", "entedescatto",
 			"annoatto", "numeroallegatiatto" };
-
+*/
 	private Map<String, String> context = null;
 	private static PutAttoClient pac = null;
 
@@ -113,16 +113,18 @@ public class PutAttoHelper {
 
 		for (Iterator<AllegatoATM> i = files.iterator(); i.hasNext();) {
 			AllegatoATM a = i.next();
-			File f = a.getFileallegato();
-			String fileExtension = f.getName().substring(
-					f.getName().indexOf('.') + 1);
+			String fileExtension = a.getFileallegatoname().substring(
+					a.getFileallegatoname().indexOf('.') + 1);
 
 			try {
 
-				byte[] buffer = new byte[(int) f.length()];
+				StringBuffer buffer = new StringBuffer();
 				DataInputStream dis = new DataInputStream(
-						new FileInputStream(f));
-				dis.read(buffer);
+						a.getFileallegato());
+				int c = -1;
+				while((c = dis.read()) != -1) {
+					buffer.append((char)c);
+				}
 				dis.close();
 
 				marshaledFile.append("{\"s_titoloallegato\":\"")
@@ -130,7 +132,7 @@ public class PutAttoHelper {
 						.append("\",\"s_estensioneallegato\":\"")
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
-						.append(Base64.encode(buffer)).append("\"}");
+						.append(Base64.encode(buffer.toString().getBytes())).append("\"}");
 
 				if (i.hasNext()) {
 					marshaledFile.append(",");
