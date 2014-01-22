@@ -1,6 +1,6 @@
 package com.axiastudio.suite.plugins.atm;
 
-import java.io.File;
+import java.io.InputStream;
 
 /**
  * User: tiziano
@@ -10,14 +10,16 @@ import java.io.File;
 public class AllegatoATM {
 
 
-    private File fileallegato;
+    // private File fileallegato;
+	private InputStream fileallegato;
     private String titoloallegato;
-
-    public File getFileallegato() {
+    private String fileallegatoname;
+    
+    public InputStream getFileallegato() {
         return fileallegato;
     }
 
-    public void setFileallegato(File fileallegato) {
+    public void setFileallegato(InputStream fileallegato) {
         this.fileallegato = fileallegato;
     }
 
@@ -29,4 +31,12 @@ public class AllegatoATM {
     public void setTitoloallegato(String titoloallegato) {
         this.titoloallegato = titoloallegato;
     }
+
+	public String getFileallegatoname() {
+		return fileallegatoname;
+	}
+
+	public void setFileallegatoname(String fileallegatoname) {
+		this.fileallegatoname = fileallegatoname;
+	}
 }
