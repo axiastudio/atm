@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import com.axiastudio.suite.plugins.atm.wsa.getatto.GetAttoServiceStub;
 import com.axiastudio.suite.plugins.atm.wsa.getatto.GetAttoServiceStub.GetAttoInfo;
+import com.axiastudio.suite.plugins.atm.wsa.getatto.GetAttoServiceStub.GetAttoInfoResponse;
 import com.axiastudio.suite.plugins.atm.wsa.getatto.GetAttoServiceStub.GetAttoList;
 
 import com.axiastudio.suite.plugins.atm.utils.Utils;
@@ -81,17 +82,23 @@ public class GetAttoClient extends ATMClient {
 		try {
 			GetAttoServiceStub.GetAttoListResponse attoList = srv
 					.getAttoList(getAttoListRequest(filter));
-			if (!checkResponseError(attoList.get_return())) {
+			String retVal = attoList.get_return();
+			if (!checkResponseError(retVal)) {
 				System.out.println("\nDeserialize atto list: "
-						+ attoList.get_return());
+						+ retVal);
 			}
-			JSONArray l = new JSONArray(attoList.get_return());
+			JSONArray l = new JSONArray(retVal);
 			for (int i = 0, len = l.length(); i < len; i++) {
-				GetAttoInfo gai = Utils.buildGetAttoInfoFromJSON((JSONObject) l
-						.get(i));
 				System.out.println(l.get(i));
+				GetAttoInfo gai = new GetAttoInfo();
+				gai.setAttoid((String)l.get(i));
+				gai.setInfo_req((String)l.get(i));
+				gai.setToken(token);
+				GetAttoInfoResponse gair = srv.getAttoInfo(gai);
+				System.out.println("Atto info object: " + gair.get_return());
 				response.add(gai);
 			}
+			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
