@@ -2,13 +2,12 @@ package com.axiastudio.suite.plugins.atm.helper;
 
 import com.axiastudio.suite.plugins.atm.AllegatoATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
-import com.axiastudio.suite.plugins.atm.helper.PutAttoHelper;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -93,7 +92,8 @@ public class helperTest {
 		AllegatoATM allegato = new AllegatoATM();
 		allegato.setTitoloallegato("Allegato di prova");
 
-		allegato.setFileallegato(new File("allegato.txt"));
+		allegato.setFileallegato(new FileInputStream("allegato.txt"));
+        allegato.setFileallegatoname("allegato.txt");
 
 		allegati.add(allegato);
 
