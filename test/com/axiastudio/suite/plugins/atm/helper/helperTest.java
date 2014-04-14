@@ -2,7 +2,6 @@ package com.axiastudio.suite.plugins.atm.helper;
 
 import com.axiastudio.suite.plugins.atm.AllegatoATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
-import com.axiastudio.suite.plugins.atm.helper.PutAttoHelper;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 
 import org.junit.Assert;
@@ -94,7 +93,13 @@ public class helperTest {
 		AllegatoATM allegato = new AllegatoATM();
 		allegato.setTitoloallegato("Allegato di prova");
 
-		allegato.setFileallegato(new FileInputStream(new File("allegato.txt")));
+		File fileAllegato = new File("allegato.txt");
+		if (fileAllegato.exists()) {
+		
+			allegato.setFileallegato(new FileInputStream(fileAllegato));
+	        allegato.setFileallegatoname("allegato.txt");
+	        
+		}
 		
 		allegati.add(allegato);
 
@@ -103,4 +108,5 @@ public class helperTest {
 		Assert.assertTrue(true);
 
 	}
+
 }
