@@ -49,8 +49,10 @@ public class PutAttoHelper {
 		return pac;
 	}
 
-	public void putAtto(PubblicazioneATM pubblicazione, List<AllegatoATM> files) {
+	public boolean putAtto(PubblicazioneATM pubblicazione, List<AllegatoATM> files) {
 
+		boolean toReturn = false;
+		
 		Map<String, Object> atto = fillAttoFromPubblicazione(pubblicazione,
 				files);
 
@@ -58,16 +60,20 @@ public class PutAttoHelper {
 
 			getPutAttoClientInstance().putAtto(atto);
 
+			toReturn = true;
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+		return toReturn;
+		
 	}
 
-	public void putAtto(PubblicazioneATM pubblicazione) {
+	public boolean putAtto(PubblicazioneATM pubblicazione) {
 
-		putAtto(pubblicazione, null);
+		return putAtto(pubblicazione, null);
 
 	}
 
