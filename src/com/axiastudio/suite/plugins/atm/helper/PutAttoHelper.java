@@ -129,12 +129,13 @@ public class PutAttoHelper {
 				}
 				dis.close();
 
+				// Base64 with second params if less than 4 no newlines
 				marshaledFile.append("{\"s_titoloallegato\":\"")
 						.append(a.getTitoloallegato())
 						.append("\",\"s_estensioneallegato\":\"")
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
-						.append(Base64.encode(buffer.toString().getBytes()))
+						.append(Base64.encode(buffer.toString().getBytes(), 0))
 						.append("\"}");
 
 				if (i.hasNext()) {
@@ -155,8 +156,8 @@ public class PutAttoHelper {
 		
 		System.out.println("JSON File allegati:\n|" + marshaledFile.toString()+"|");
 
-		// Looks like it don't affect the decode
-		return marshaledFile.toString().replace("\n", "");
+		return marshaledFile.toString();
+
 	}
 
 }
