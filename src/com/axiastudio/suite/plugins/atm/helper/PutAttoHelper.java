@@ -58,9 +58,7 @@ public class PutAttoHelper {
 
 		try {
 
-			getPutAttoClientInstance().putAtto(atto);
-
-			toReturn = true;
+			toReturn = getPutAttoClientInstance().putAtto(atto);
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
