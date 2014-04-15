@@ -82,7 +82,7 @@ public class PutAttoHelper {
 
 		Map<String, Object> atto = new HashMap<String, Object>();
 
-		atto.put("d_dataatto", pubblicazione.getInizioconsultazione());
+		atto.put("d_dataatto", pubblicazione.getDataatto());
 
 		atto.put("n_durataatto", pubblicazione.getDurataconsultazione());
 

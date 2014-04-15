@@ -31,7 +31,7 @@ public class helperTest {
 		PubblicazioneATM p = new PubblicazioneATM();
 		p.setTitolo("Primo tentativo");
 		p.setDescrizione("Primo tentativo di inserimento su Albo");
-		p.setInizioconsultazione(oggi);
+		p.setDataatto(oggi);
 		p.setDurataconsultazione(10);
 		p.setRichiedente("Comune di Riva del Garda");
 		p.setTipoatto("Determine");
@@ -73,7 +73,7 @@ public class helperTest {
 		PubblicazioneATM p = new PubblicazioneATM();
 		p.setTitolo("Primo tentativo");
 		p.setDescrizione("Primo tentativo di inserimento su Albo");
-		p.setInizioconsultazione(oggi);
+		p.setDataatto(oggi);
 		p.setDurataconsultazione(10);
 		p.setRichiedente("Comune di Riva del Garda");
 		p.setTipoatto("Determine");
