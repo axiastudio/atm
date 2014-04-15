@@ -61,8 +61,9 @@ public class PutAttoClient extends ATMClient {
 	 * 
 	 * @throws Exception
 	 */
-	public void putAtto(Map attoMap) throws Exception {
+	public boolean putAtto(Map attoMap) throws Exception {
 
+		boolean toReturn = false;
 		PutAtto atto = new PutAtto();
 
 		try {
@@ -78,11 +79,15 @@ public class PutAttoClient extends ATMClient {
 				System.out.println("Atto sent: " + response.get_return());
 			}
 
+			toReturn = true;
+			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+		return toReturn;
+		
 	}
 
 	/**
