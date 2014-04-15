@@ -17,14 +17,14 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class PutAttoHelper {
 
-	/*private static final String[] attoAttributes = new String[] { "dataatto",
-			"numeroatto", "datapubblicazioneatto", "datascadenzaatto",
-			"durataatto", "titoloatto", "oggettoatto", "tipoatto", "fileatto",
-			"statoatto", "dataannullamentoatto", "motivoannullamentoatto",
-			"responsabileatto", "progressivoatto", "datarevocaatto",
-			"peraltroenteatto", "altroenteatto", "enteatto", "entedescatto",
-			"annoatto", "numeroallegatiatto" };
-*/
+	/*
+	 * private static final String[] attoAttributes = new String[] { "dataatto",
+	 * "numeroatto", "datapubblicazioneatto", "datascadenzaatto", "durataatto",
+	 * "titoloatto", "oggettoatto", "tipoatto", "fileatto", "statoatto",
+	 * "dataannullamentoatto", "motivoannullamentoatto", "responsabileatto",
+	 * "progressivoatto", "datarevocaatto", "peraltroenteatto", "altroenteatto",
+	 * "enteatto", "entedescatto", "annoatto", "numeroallegatiatto" };
+	 */
 	private Map<String, String> context = null;
 	private static PutAttoClient pac = null;
 
@@ -49,24 +49,25 @@ public class PutAttoHelper {
 		return pac;
 	}
 
-	public boolean putAtto(PubblicazioneATM pubblicazione, List<AllegatoATM> files) {
+	public boolean putAtto(PubblicazioneATM pubblicazione,
+			List<AllegatoATM> files) {
 
 		boolean toReturn = false;
-		
+
 		Map<String, Object> atto = fillAttoFromPubblicazione(pubblicazione,
 				files);
 
 		try {
 
 			toReturn = getPutAttoClientInstance().putAtto(atto);
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		return toReturn;
-		
+
 	}
 
 	public boolean putAtto(PubblicazioneATM pubblicazione) {
@@ -121,11 +122,10 @@ public class PutAttoHelper {
 			try {
 
 				StringBuffer buffer = new StringBuffer();
-				DataInputStream dis = new DataInputStream(
-						a.getFileallegato());
+				DataInputStream dis = new DataInputStream(a.getFileallegato());
 				int c = -1;
-				while((c = dis.read()) != -1) {
-					buffer.append((char)c);
+				while ((c = dis.read()) != -1) {
+					buffer.append((char) c);
 				}
 				dis.close();
 
@@ -134,7 +134,8 @@ public class PutAttoHelper {
 						.append("\",\"s_estensioneallegato\":\"")
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
-						.append(Base64.encode(buffer.toString().getBytes())).append("\"}");
+						.append(Base64.encode(buffer.toString().getBytes()))
+						.append("\"}");
 
 				if (i.hasNext()) {
 					marshaledFile.append(",");
@@ -151,10 +152,11 @@ public class PutAttoHelper {
 		}
 
 		marshaledFile.append("]");
+		
+		System.out.println("JSON File allegati:\n|" + marshaledFile.toString()+"|");
 
-		System.out.println("JSON File allegati:\n" + marshaledFile.toString());
-
-		return marshaledFile.toString();
+		// Looks like it don't affect the decode
+		return marshaledFile.toString().replace("\n", "");
 	}
 
 }

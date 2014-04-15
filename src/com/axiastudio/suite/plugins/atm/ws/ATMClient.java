@@ -50,6 +50,7 @@ public class ATMClient {
 		StringBuffer code = new StringBuffer();
 		code.append(wsakey).append(userID).append(MAC)
 				.append(Utils.digest(password).toUpperCase());
+		// System.out.println("Code: " + Utils.digest(code.toString()));
 		return Utils.digest(code.toString());
 	}
 

@@ -141,7 +141,7 @@ public class PutAttoClient extends ATMClient {
 		}
 
 		json.append("}");
-
+		
 		System.out.println("Serialized JSON:\n" + json.toString());
 
 		return json.toString();

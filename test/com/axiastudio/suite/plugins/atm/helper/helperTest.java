@@ -24,6 +24,7 @@ import java.util.Properties;
 public class helperTest {
 
 	@Test
+	@Ignore
 	public void testPutAtto() throws Exception {
 
 		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
@@ -47,7 +48,13 @@ public class helperTest {
 				ctx.getProperty(ATMClient.WSAKEY),
 				ctx.getProperty(ATMClient.ENDPOINT));
 
-		helper.putAtto(p);
+		boolean res = helper.putAtto(p);
+		
+		if (res) {
+			System.out.println("Done");
+		} else {
+			System.out.println("Something is gone wrong");
+		}
 
 	}
 
@@ -66,15 +73,14 @@ public class helperTest {
 	}
 
 	@Test
-	@Ignore
 	public void testPutAttoAllegato() throws Exception {
 
 		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
 		Date oggi = calendar.getTime();
 
 		PubblicazioneATM p = new PubblicazioneATM();
-		p.setTitolo("Primo tentativo");
-		p.setDescrizione("Primo tentativo di inserimento su Albo");
+		p.setTitolo("Test con allegato");
+		p.setDescrizione("Controllare il file allegato");
 		p.setDataatto(oggi);
 		p.setDurataconsultazione(10);
 		p.setRichiedente("Comune di Riva del Garda");
