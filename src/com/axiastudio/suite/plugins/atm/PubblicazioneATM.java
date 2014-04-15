@@ -12,7 +12,8 @@ public class PubblicazioneATM {
 
     private String titolo;
     private String descrizione;
-    private Date inizioconsultazione;
+    private Date dataatto;
+    private Integer numeroatto;
     private Integer durataconsultazione;
     private String richiedente;
     private String tipoatto;
@@ -33,12 +34,20 @@ public class PubblicazioneATM {
         return descrizione;
     }
 
-    public void setInizioconsultazione(Date inizioconsultazione) {
-        this.inizioconsultazione = inizioconsultazione;
+    public void setDataatto(Date dataatto) {
+        this.dataatto = dataatto;
     }
 
-    public Date getInizioconsultazione() {
-        return inizioconsultazione;
+    public Date getDataatto() {
+        return dataatto;
+    }
+
+    public Integer getNumeroatto() {
+        return numeroatto;
+    }
+
+    public void setNumeroatto(Integer numeroatto) {
+        this.numeroatto = numeroatto;
     }
 
     public void setDurataconsultazione(Integer durataconsultazione) {
