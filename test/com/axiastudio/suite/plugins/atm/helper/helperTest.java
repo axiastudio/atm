@@ -5,6 +5,7 @@ import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -29,8 +30,8 @@ public class helperTest {
 		Date oggi = calendar.getTime();
 
 		PubblicazioneATM p = new PubblicazioneATM();
-		p.setTitolo("Primo tentativo");
-		p.setDescrizione("Primo tentativo di inserimento su Albo");
+		p.setTitolo("Altro tentativo");
+		p.setDescrizione("Ulteriore tentativo di inserimento su Albo");
 		p.setInizioconsultazione(oggi);
 		p.setDurataconsultazione(10);
 		p.setRichiedente("Comune di Riva del Garda");
@@ -65,6 +66,7 @@ public class helperTest {
 	}
 
 	@Test
+	@Ignore
 	public void testPutAttoAllegato() throws Exception {
 
 		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
@@ -95,12 +97,12 @@ public class helperTest {
 
 		File fileAllegato = new File("allegato.txt");
 		if (fileAllegato.exists()) {
-		
+
 			allegato.setFileallegato(new FileInputStream(fileAllegato));
-	        allegato.setFileallegatoname("allegato.txt");
-	        
+			allegato.setFileallegatoname("allegato.txt");
+
 		}
-		
+
 		allegati.add(allegato);
 
 		helper.putAtto(p, allegati);
