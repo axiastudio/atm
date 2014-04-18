@@ -24,7 +24,6 @@ import java.util.Properties;
 public class helperTest {
 
 	@Test
-	@Ignore
 	public void testPutAtto() throws Exception {
 
 		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);

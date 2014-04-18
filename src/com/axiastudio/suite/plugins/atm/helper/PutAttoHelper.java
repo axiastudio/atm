@@ -8,12 +8,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+
 import com.axiastudio.suite.plugins.atm.AllegatoATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 import com.axiastudio.suite.plugins.atm.ws.PutAttoClient;
-
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class PutAttoHelper {
 
@@ -130,12 +130,13 @@ public class PutAttoHelper {
 				dis.close();
 
 				// Base64 with second params if less than 4 no newlines
+				Base64 encoder = new Base64();
 				marshaledFile.append("{\"s_titoloallegato\":\"")
 						.append(a.getTitoloallegato())
 						.append("\",\"s_estensioneallegato\":\"")
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
-						.append(Base64.encode(buffer.toString().getBytes(), 0))
+						.append(new String(encoder.encode(buffer.toString().getBytes())))
 						.append("\"}");
 
 				if (i.hasNext()) {
