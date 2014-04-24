@@ -17,6 +17,7 @@ public class PubblicazioneATM {
     private Integer durataconsultazione;
     private String richiedente;
     private String tipoatto;
+	private AllegatoATM fileAtto;
 
     public void setTitolo(String titolo) {
         this.titolo = titolo;
@@ -73,4 +74,13 @@ public class PubblicazioneATM {
     public String getTipoatto() {
         return tipoatto;
     }
+
+    public void setFileAtto(AllegatoATM fileAtto) {
+    	this.fileAtto = fileAtto;
+    }
+    
+	public AllegatoATM getFileAtto() {
+		return this.fileAtto;
+	}
+	
 }

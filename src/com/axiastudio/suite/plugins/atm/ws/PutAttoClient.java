@@ -135,9 +135,12 @@ public class PutAttoClient extends ATMClient {
 					.append((String) attoMap.get("f_fileatto")).append("\"");
 		}
 
-		if (attoMap.containsKey("s_allegati")) {
-			json.append(",\"s_allegati\": ").append(
-					(String) attoMap.get("s_allegati"));
+		if (attoMap.containsKey("s_allegati")
+				&& !((String) attoMap.get("s_allegati")).equals("{}")) {
+			json.append(",\"s_allegati\": ")
+					.append((String) attoMap.get("s_allegati"))
+					.append(",\"n_numallegatiatto\":\"")
+					.append(attoMap.get("n_numallegatiatto")).append("\"");
 		}
 
 		json.append("}");

@@ -1,14 +1,18 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
 import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
 
 import com.axiastudio.suite.plugins.atm.AllegatoATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
@@ -17,6 +21,8 @@ import com.axiastudio.suite.plugins.atm.ws.PutAttoClient;
 
 public class PutAttoHelper {
 
+	private Logger log = Logger.getLogger(PutAttoHelper.class);
+	
 	/*
 	 * private static final String[] attoAttributes = new String[] { "dataatto",
 	 * "numeroatto", "datapubblicazioneatto", "datascadenzaatto", "durataatto",
@@ -93,11 +99,47 @@ public class PutAttoHelper {
 
 		atto.put("s_altroenteatto", pubblicazione.getRichiedente());
 
+		if (pubblicazione.getFileAtto() != null) {
+			AllegatoATM fa = pubblicazione.getFileAtto();
+
+			atto.put(
+					"s_estensioneatto",
+					fa.getFileallegatoname().substring(
+							fa.getFileallegatoname().indexOf('.') + 1));
+
+			atto.put(
+					"f_fileatto",
+					marshalingFileAtto(fa));
+		}
+		
 		if (files != null) {
 			atto.put("s_allegati", marshalingFiles(files));
+			atto.put("n_numallegatiatto", files.size());
 		}
 
 		return atto;
+	}
+
+	private String marshalingFileAtto(AllegatoATM fa) {
+
+		try {
+
+			Base64 encoder = new Base64();
+
+			int len = (int) (new File(fa.getFileallegatoname())).length();
+
+			return new String(encoder.encode(loadBytesFile(
+					fa.getFileallegato(), len, fa.getFileallegatoname())));
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	/**
@@ -117,27 +159,23 @@ public class PutAttoHelper {
 		for (Iterator<AllegatoATM> i = files.iterator(); i.hasNext();) {
 			AllegatoATM a = i.next();
 			String fileExtension = a.getFileallegatoname().substring(
-					a.getFileallegatoname().indexOf('.'));
+					a.getFileallegatoname().indexOf('.')+1);
 
 			try {
 
-				StringBuffer buffer = new StringBuffer();
-				DataInputStream dis = new DataInputStream(a.getFileallegato());
-				int c = -1;
-				while ((c = dis.read()) != -1) {
-					buffer.append((char) c);
-				}
-				dis.close();
+				File f = new File(a.getFileallegatoname());
 
 				// Base64 with second params if less than 4 no newlines
 				Base64 encoder = new Base64();
-				marshaledFile.append("{\"s_titoloallegato\":\"")
+				marshaledFile
+						.append("{\"s_titoloallegato\":\"")
 						.append(a.getTitoloallegato())
 						.append("\",\"s_estensioneallegato\":\"")
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
-						.append(new String(encoder.encode(buffer.toString().getBytes())))
-						.append("\"}");
+						.append(new String(encoder.encode(loadBytesFile(
+								a.getFileallegato(), (int) f.length(),
+								a.getFileallegatoname())))).append("\"}");
 
 				if (i.hasNext()) {
 					marshaledFile.append(",");
@@ -155,10 +193,33 @@ public class PutAttoHelper {
 
 		marshaledFile.append("]");
 		
-		System.out.println("JSON File allegati:\n|" + marshaledFile.toString()+"|");
+		log.debug("JSON File allegati:\n|" + marshaledFile.toString()+"|");
 
 		return marshaledFile.toString();
 
 	}
 
+	private static byte[] loadBytesFile(InputStream is, int len, String name)
+			throws IOException {
+
+		if (len > Integer.MAX_VALUE) {
+			// File is too large
+		}
+		byte[] bytes = new byte[len];
+
+		int offset = 0;
+		int numRead = 0;
+		while (offset < bytes.length
+				&& (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+			offset += numRead;
+		}
+
+		if (offset < bytes.length) {
+			throw new IOException("Could not completely read file " + name);
+		}
+
+		is.close();
+		return bytes;
+	}
+	
 }
