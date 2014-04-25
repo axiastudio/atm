@@ -4,13 +4,19 @@ import com.axiastudio.suite.plugins.atm.AllegatoATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +29,8 @@ import java.util.Properties;
  */
 public class helperTest {
 
+	private Logger log = Logger.getLogger(helperTest.class);
+	
 	@Test
 	@Ignore
 	public void testPutAtto() throws Exception {
@@ -96,20 +104,33 @@ public class helperTest {
 				ctx.getProperty(ATMClient.WSAKEY),
 				ctx.getProperty(ATMClient.ENDPOINT));
 
-		List<AllegatoATM> allegati = new ArrayList<AllegatoATM>();
+		AllegatoATM fileAtto = new AllegatoATM();
+		fileAtto.setTitoloallegato(p.getTitolo());
 
-		AllegatoATM allegato = new AllegatoATM();
-		allegato.setTitoloallegato("Allegato di prova");
-
-		File fileAllegato = new File("allegato.txt");
+		File fileAllegato = new File("allegato.pdf");
 		if (fileAllegato.exists()) {
 
-			allegato.setFileallegato(new FileInputStream(fileAllegato));
-			allegato.setFileallegatoname("allegato.txt");
+			fileAtto.setFileallegato(new FileInputStream(fileAllegato));
+			fileAtto.setFileallegatoname("allegato.pdf");
 
+			p.setFileAtto(fileAtto);
+			
 		}
+		
+		List<AllegatoATM> allegati = new ArrayList<AllegatoATM>();
 
-		allegati.add(allegato);
+//		AllegatoATM allegato = new AllegatoATM();
+//		allegato.setTitoloallegato("Allegato di prova");
+//
+//		File fileAllegato = new File("allegato.txt");
+//		if (fileAllegato.exists()) {
+//
+//			allegato.setFileallegato(new FileInputStream(fileAllegato));
+//			allegato.setFileallegatoname("allegato.txt");
+//
+//		}
+//
+//		allegati.add(allegato);
 
 		helper.putAtto(p, allegati);
 
