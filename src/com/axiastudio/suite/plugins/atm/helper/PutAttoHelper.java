@@ -1,5 +1,7 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -126,10 +128,8 @@ public class PutAttoHelper {
 
 			Base64 encoder = new Base64();
 
-			int len = (int) (new File(fa.getFileallegatoname())).length();
-
 			return new String(encoder.encode(loadBytesFile(
-					fa.getFileallegato(), len, fa.getFileallegatoname())));
+					fa.getFileallegato())));
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -174,8 +174,7 @@ public class PutAttoHelper {
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
 						.append(new String(encoder.encode(loadBytesFile(
-								a.getFileallegato(), (int) f.length(),
-								a.getFileallegatoname())))).append("\"}");
+								a.getFileallegato())))).append("\"}");
 
 				if (i.hasNext()) {
 					marshaledFile.append(",");
@@ -199,27 +198,27 @@ public class PutAttoHelper {
 
 	}
 
-	private static byte[] loadBytesFile(InputStream is, int len, String name)
-			throws IOException {
+	private byte[] loadBytesFile(InputStream is) throws IOException {
+	
+		byte[] buff = new byte[1024];
+		ByteArrayOutputStream bais = new ByteArrayOutputStream();
+		int bRead = 0;
+	
+		while((bRead = is.read(buff)) > 0) {
+			
+			if (bRead > Integer.MAX_VALUE) {
+				log.error("The stream is too large");
+				return null;
+			}
 
-		if (len > Integer.MAX_VALUE) {
-			// File is too large
+			bais.write(buff);
 		}
-		byte[] bytes = new byte[len];
-
-		int offset = 0;
-		int numRead = 0;
-		while (offset < bytes.length
-				&& (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
-			offset += numRead;
-		}
-
-		if (offset < bytes.length) {
-			throw new IOException("Could not completely read file " + name);
-		}
-
+		
 		is.close();
-		return bytes;
+		bais.close();
+		
+		return bais.toByteArray();
+		
 	}
 	
 }
