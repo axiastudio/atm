@@ -1,7 +1,6 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -116,10 +115,8 @@ public class PutAttoHelper {
 
 		try {
 
-			Base64 encoder = new Base64();
-
-			return new String(encoder.encode(loadBytesFile(
-					fa.getFileallegato())));
+			return new String(Base64.encodeBase64(loadBytesFile(
+					fa.getFileallegato()), false));
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -154,15 +151,14 @@ public class PutAttoHelper {
 			try {
 
 				// Base64 with second params if less than 4 no newlines
-				Base64 encoder = new Base64();
 				marshaledFile
 						.append("{\"s_titoloallegato\":\"")
 						.append(a.getTitoloallegato())
 						.append("\",\"s_estensioneallegato\":\"")
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
-						.append(new String(encoder.encode(loadBytesFile(
-								a.getFileallegato())))).append("\"}");
+						.append(new String(Base64.encodeBase64(loadBytesFile(
+								a.getFileallegato()), false))).append("\"}");
 
 				if (i.hasNext()) {
 					marshaledFile.append(",");
