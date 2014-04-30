@@ -32,7 +32,6 @@ public class helperTest {
 	private Logger log = Logger.getLogger(helperTest.class);
 	
 	@Test
-	@Ignore
 	public void testPutAtto() throws Exception {
 
 		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
@@ -87,8 +86,8 @@ public class helperTest {
 		Date oggi = calendar.getTime();
 
 		PubblicazioneATM p = new PubblicazioneATM();
-		p.setTitolo("Test con allegato");
-		p.setDescrizione("Controllare il file allegato");
+		p.setTitolo("Test con allegato 2");
+		p.setDescrizione("Usa uno stram non un file");
 		p.setDataatto(oggi);
 		p.setDurataconsultazione(10);
 		p.setRichiedente("Comune di Riva del Garda");
