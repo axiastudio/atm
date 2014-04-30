@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub;
 import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub.GetTokenResponse;
 import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub.PutAtto;
@@ -14,6 +16,8 @@ import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub.PutAttoRe
 
 public class PutAttoClient extends ATMClient {
 
+	private Logger log = Logger.getLogger(PutAttoClient.class);
+	
 	private String endpoint = "";
 
 	private PutAttoServiceStub srv = null;
@@ -50,7 +54,7 @@ public class PutAttoClient extends ATMClient {
 				token = response.get_return();
 			}
 
-			System.out.println("\nToken: " + token);
+			log.debug("\nToken: " + token);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -73,10 +77,10 @@ public class PutAttoClient extends ATMClient {
 			PutAttoResponse response = srv.putAtto(atto);
 
 			if (checkResponseError(response.get_return())) {
-				System.out.println("Error: " + response.get_return());
+				log.debug("Error: " + response.get_return());
 				throw new Exception(response.get_return());
 			} else {
-				System.out.println("Atto sent: " + response.get_return());
+				log.debug("Atto sent: " + response.get_return());
 			}
 
 			toReturn = true;
@@ -144,7 +148,7 @@ public class PutAttoClient extends ATMClient {
 
 		json.append("}");
 		
-		System.out.println("Serialized JSON:\n" + json.toString());
+		log.debug("Serialized JSON:\n" + json.toString());
 
 		return json.toString();
 	}
