@@ -25,14 +25,6 @@ public class PutAttoHelper {
 
 	private Logger log = Logger.getLogger(PutAttoHelper.class);
 	
-	/*
-	 * private static final String[] attoAttributes = new String[] { "dataatto",
-	 * "numeroatto", "datapubblicazioneatto", "datascadenzaatto", "durataatto",
-	 * "titoloatto", "oggettoatto", "tipoatto", "fileatto", "statoatto",
-	 * "dataannullamentoatto", "motivoannullamentoatto", "responsabileatto",
-	 * "progressivoatto", "datarevocaatto", "peraltroenteatto", "altroenteatto",
-	 * "enteatto", "entedescatto", "annoatto", "numeroallegatiatto" };
-	 */
 	private Map<String, String> context = null;
 	private static PutAttoClient pac = null;
 
