@@ -113,27 +113,14 @@ public class helperTest {
 			fileAtto.setFileallegatoname("allegato.pdf");
 
 			p.setFileAtto(fileAtto);
-			
+		
+		} else {
+			Assert.assertTrue("File allegato.pdf not exists", false);
 		}
 		
 		List<AllegatoATM> allegati = new ArrayList<AllegatoATM>();
 
-//		AllegatoATM allegato = new AllegatoATM();
-//		allegato.setTitoloallegato("Allegato di prova");
-//
-//		File fileAllegato = new File("allegato.txt");
-//		if (fileAllegato.exists()) {
-//
-//			allegato.setFileallegato(new FileInputStream(fileAllegato));
-//			allegato.setFileallegatoname("allegato.txt");
-//
-//		}
-//
-//		allegati.add(allegato);
-
-		helper.putAtto(p, allegati);
-
-		Assert.assertTrue(true);
+		Assert.assertTrue(helper.putAtto(p, allegati));
 
 	}
 
