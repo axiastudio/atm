@@ -1,10 +1,7 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -155,8 +152,6 @@ public class PutAttoHelper {
 					a.getFileallegatoname().indexOf('.')+1);
 
 			try {
-
-				File f = new File(a.getFileallegatoname());
 
 				// Base64 with second params if less than 4 no newlines
 				Base64 encoder = new Base64();
