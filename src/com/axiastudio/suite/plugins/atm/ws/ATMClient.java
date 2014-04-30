@@ -4,12 +4,16 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 
+import org.apache.log4j.Logger;
+
 import com.axiastudio.suite.plugins.atm.wsa.getatto.GetAttoServiceStub;
 import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub;
 
 import com.axiastudio.suite.plugins.atm.utils.Utils;
 
 public class ATMClient {
+
+	private Logger log = Logger.getLogger(ATMClient.class);
 
 	public static final String WSAKEY = "wsakey";
 	public static final String USER_ID = "userID";
@@ -35,7 +39,7 @@ public class ATMClient {
 
 		if (Utils.isWSError(response)) {
 			// System.out.println("Is error: " + Utils.printWSError(response));
-			System.err.println("[JSON] " + Utils.getErrorMessage(response));
+			log.error("[JSON] " + Utils.getErrorMessage(response));
 			return true;
 		}
 
