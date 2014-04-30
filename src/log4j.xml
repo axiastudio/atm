@@ -8,9 +8,21 @@
       <param name="ConversionPattern" value="%-5p %c{1} - %m%n"/> 
     </layout> 
   </appender> 
+  
+  <logger name="org.apache">
+   <level value="off"/>
+  </logger>
+  
+  <logger name="org.apache.axis2">
+    <level value="off"/>
+  </logger>
 
+  <logger name="com.ctc.wstx">
+   <level value="off"/>
+  </logger>
+  
   <root> 
-    <priority value ="debug" /> 
+    <priority value ="info" /> 
     <appender-ref ref="console" /> 
   </root>
   
