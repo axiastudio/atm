@@ -62,10 +62,11 @@ public class PutAttoHelper {
 			toReturn = getPutAttoClientInstance().putAtto(atto);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
+		log.debug("Result of putatto: " + toReturn);
+		
 		return toReturn;
 
 	}
