@@ -178,7 +178,7 @@ public class PutAttoHelper {
 		
 		log.debug("JSON File allegati:\n|" + marshaledFile.toString()+"|");
 
-		return marshaledFile.toString();
+		return "\"" + marshaledFile.toString().replaceAll("\"","\\\\\"") + "\"";
 
 	}
 
