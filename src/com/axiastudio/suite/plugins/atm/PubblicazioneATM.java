@@ -1,6 +1,7 @@
 package com.axiastudio.suite.plugins.atm;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * User: tiziano
@@ -17,7 +18,8 @@ public class PubblicazioneATM {
     private Integer durataconsultazione;
     private String richiedente;
     private String tipoatto;
-	private AllegatoATM fileAtto;
+	private FileATM fileAtto;
+    private List<FileATM> allegati;
 
     public void setTitolo(String titolo) {
         this.titolo = titolo;
@@ -75,12 +77,19 @@ public class PubblicazioneATM {
         return tipoatto;
     }
 
-    public void setFileAtto(AllegatoATM fileAtto) {
+    public void setFileAtto(FileATM fileAtto) {
     	this.fileAtto = fileAtto;
     }
     
-	public AllegatoATM getFileAtto() {
+	public FileATM getFileAtto() {
 		return this.fileAtto;
 	}
-	
+
+    public List<FileATM> getAllegati() {
+        return allegati;
+    }
+
+    public void setAllegati(List<FileATM> allegati) {
+        this.allegati = allegati;
+    }
 }

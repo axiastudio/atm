@@ -1,22 +1,16 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
-import com.axiastudio.suite.plugins.atm.AllegatoATM;
+import com.axiastudio.suite.plugins.atm.FileATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,13 +79,13 @@ public class helperTest {
 		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
 		Date oggi = calendar.getTime();
 
-		PubblicazioneATM p = new PubblicazioneATM();
-		p.setTitolo("Test con allegato 2");
-		p.setDescrizione("Usa uno stram non un file");
-		p.setDataatto(oggi);
-		p.setDurataconsultazione(10);
-		p.setRichiedente("Comune di Riva del Garda");
-		p.setTipoatto("Determine");
+		PubblicazioneATM pubblicazione = new PubblicazioneATM();
+		pubblicazione.setTitolo("Test con allegato 2");
+		pubblicazione.setDescrizione("Usa uno stram non un file");
+		pubblicazione.setDataatto(oggi);
+		pubblicazione.setDurataconsultazione(10);
+		pubblicazione.setRichiedente("Comune di Riva del Garda");
+		pubblicazione.setTipoatto("Determine");
 
 		PutAttoHelper helper = new PutAttoHelper();
 
@@ -103,8 +97,8 @@ public class helperTest {
 				ctx.getProperty(ATMClient.WSAKEY),
 				ctx.getProperty(ATMClient.ENDPOINT));
 
-		AllegatoATM fileAtto = new AllegatoATM();
-		fileAtto.setTitoloallegato(p.getTitolo());
+		FileATM fileAtto = new FileATM();
+		fileAtto.setTitoloallegato(pubblicazione.getTitolo());
 
 		File fileAllegato = new File("allegato.pdf");
 		if (fileAllegato.exists()) {
@@ -112,15 +106,15 @@ public class helperTest {
 			fileAtto.setFileallegato(new FileInputStream(fileAllegato));
 			fileAtto.setFileallegatoname("allegato.pdf");
 
-			p.setFileAtto(fileAtto);
+			pubblicazione.setFileAtto(fileAtto);
 		
 		} else {
 			Assert.assertTrue("File allegato.pdf not exists", false);
 		}
 		
-		List<AllegatoATM> allegati = new ArrayList<AllegatoATM>();
+		List<FileATM> allegati = new ArrayList<FileATM>();
 
-		Assert.assertTrue(helper.putAtto(p, allegati));
+		Assert.assertTrue(helper.putAtto(pubblicazione));
 
 	}
 

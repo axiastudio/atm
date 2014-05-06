@@ -12,7 +12,7 @@ import java.util.Map;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
 
-import com.axiastudio.suite.plugins.atm.AllegatoATM;
+import com.axiastudio.suite.plugins.atm.FileATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 import com.axiastudio.suite.plugins.atm.ws.PutAttoClient;
@@ -45,13 +45,11 @@ public class PutAttoHelper {
 		return pac;
 	}
 
-	public boolean putAtto(PubblicazioneATM pubblicazione,
-			List<AllegatoATM> files) {
+	public boolean putAtto(PubblicazioneATM pubblicazione) {
 
 		boolean toReturn = false;
 
-		Map<String, Object> atto = fillAttoFromPubblicazione(pubblicazione,
-				files);
+		Map<String, Object> atto = fillAttoFromPubblicazione(pubblicazione);
 
 		try {
 
@@ -67,14 +65,7 @@ public class PutAttoHelper {
 
 	}
 
-	public boolean putAtto(PubblicazioneATM pubblicazione) {
-
-		return putAtto(pubblicazione, null);
-
-	}
-
-	private Map<String, Object> fillAttoFromPubblicazione(
-			PubblicazioneATM pubblicazione, List<AllegatoATM> files) {
+	private Map<String, Object> fillAttoFromPubblicazione(PubblicazioneATM pubblicazione) {
 
 		Map<String, Object> atto = new HashMap<String, Object>();
 
@@ -91,7 +82,7 @@ public class PutAttoHelper {
 		atto.put("s_altroenteatto", pubblicazione.getRichiedente());
 
 		if (pubblicazione.getFileAtto() != null) {
-			AllegatoATM fa = pubblicazione.getFileAtto();
+			FileATM fa = pubblicazione.getFileAtto();
 
 			atto.put(
 					"s_estensioneatto",
@@ -102,16 +93,17 @@ public class PutAttoHelper {
 					"f_fileatto",
 					marshalingFileAtto(fa));
 		}
-		
-		if (files != null) {
-			atto.put("s_allegati", marshalingFiles(files));
-			atto.put("n_numallegatiatto", files.size());
+
+        List<FileATM> allegati = pubblicazione.getAllegati();
+        if (allegati != null && allegati.size()>0) {
+			atto.put("s_allegati", marshalingFiles(allegati));
+			atto.put("n_numallegatiatto", allegati.size());
 		}
 
 		return atto;
 	}
 
-	private String marshalingFileAtto(AllegatoATM fa) {
+	private String marshalingFileAtto(FileATM fa) {
 
 		try {
 
@@ -134,7 +126,7 @@ public class PutAttoHelper {
 	 * @param files
 	 * @return
 	 */
-	private String marshalingFiles(List<AllegatoATM> files) {
+	private String marshalingFiles(List<FileATM> files) {
 		StringBuffer marshaledFile = new StringBuffer();
 
 		if (files.size() == 0) {
@@ -143,8 +135,8 @@ public class PutAttoHelper {
 
 		marshaledFile.append("[");
 
-		for (Iterator<AllegatoATM> i = files.iterator(); i.hasNext();) {
-			AllegatoATM a = i.next();
+		for (Iterator<FileATM> i = files.iterator(); i.hasNext();) {
+			FileATM a = i.next();
 			String fileExtension = a.getFileallegatoname().substring(
 					a.getFileallegatoname().indexOf('.')+1);
 
@@ -176,7 +168,7 @@ public class PutAttoHelper {
 
 		marshaledFile.append("]");
 		
-		log.debug("JSON File allegati:\n|" + marshaledFile.toString()+"|");
+		log.debug("JSON File allegati:\n|" + marshaledFile.toString() + "|");
 
 		return "\"" + marshaledFile.toString().replaceAll("\"","\\\\\"") + "\"";
 
