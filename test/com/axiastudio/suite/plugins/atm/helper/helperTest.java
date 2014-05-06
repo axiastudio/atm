@@ -97,22 +97,28 @@ public class helperTest {
 				ctx.getProperty(ATMClient.WSAKEY),
 				ctx.getProperty(ATMClient.ENDPOINT));
 
-		FileATM fileAtto = new FileATM();
-		fileAtto.setTitoloallegato(pubblicazione.getTitolo());
-
-		File fileAllegato = new File("allegato.pdf");
-		if (fileAllegato.exists()) {
-
-			fileAtto.setFileallegato(new FileInputStream(fileAllegato));
-			fileAtto.setFileallegatoname("allegato.pdf");
-
-			pubblicazione.setFileAtto(fileAtto);
-		
+		FileATM fileATMAtto = new FileATM();
+		fileATMAtto.setTitoloallegato(pubblicazione.getTitolo());
+		File fileAtto = new File("atto.pdf");
+		if (fileAtto.exists()) {
+			fileATMAtto.setFileallegato(new FileInputStream(fileAtto));
+			fileATMAtto.setFileallegatoname("atto.pdf");
+			pubblicazione.setFileAtto(fileATMAtto);
 		} else {
-			Assert.assertTrue("File allegato.pdf not exists", false);
+			Assert.assertTrue("File atto.pdf not exists", false);
 		}
 		
 		List<FileATM> allegati = new ArrayList<FileATM>();
+        FileATM fileATMAllegato = new FileATM();
+        fileATMAllegato.setTitoloallegato(pubblicazione.getTitolo());
+        File fileAllegato = new File("allegato.pdf");
+        if (fileAllegato.exists()) {
+            fileATMAllegato.setFileallegato(new FileInputStream(fileAllegato));
+            fileATMAllegato.setFileallegatoname("allegato.pdf");
+            allegati.add(fileATMAllegato);
+        } else {
+            Assert.assertTrue("File allegato.pdf not exists", false);
+        }
         pubblicazione.setAllegati(allegati);
 
 		Assert.assertTrue(helper.putAtto(pubblicazione));
