@@ -113,6 +113,7 @@ public class helperTest {
 		}
 		
 		List<FileATM> allegati = new ArrayList<FileATM>();
+        pubblicazione.setAllegati(allegati);
 
 		Assert.assertTrue(helper.putAtto(pubblicazione));
 
