@@ -1,14 +1,15 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
-import com.axiastudio.suite.plugins.atm.AllegatoATM;
+import com.axiastudio.suite.plugins.atm.FileATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
-import com.axiastudio.suite.plugins.atm.helper.PutAttoHelper;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,6 +23,8 @@ import java.util.Properties;
  */
 public class helperTest {
 
+	private Logger log = Logger.getLogger(helperTest.class);
+	
 	@Test
 	public void testPutAtto() throws Exception {
 
@@ -29,9 +32,9 @@ public class helperTest {
 		Date oggi = calendar.getTime();
 
 		PubblicazioneATM p = new PubblicazioneATM();
-		p.setTitolo("Primo tentativo");
-		p.setDescrizione("Primo tentativo di inserimento su Albo");
-		p.setInizioconsultazione(oggi);
+		p.setTitolo("Altro tentativo");
+		p.setDescrizione("Ulteriore tentativo di inserimento su Albo");
+		// p.setInizioconsultazione(oggi);
 		p.setDurataconsultazione(10);
 		p.setRichiedente("Comune di Riva del Garda");
 		p.setTipoatto("Determine");
@@ -46,7 +49,13 @@ public class helperTest {
 				ctx.getProperty(ATMClient.WSAKEY),
 				ctx.getProperty(ATMClient.ENDPOINT));
 
-		helper.putAtto(p);
+		boolean res = helper.putAtto(p);
+		
+		if (res) {
+			System.out.println("Done");
+		} else {
+			System.out.println("Something is gone wrong");
+		}
 
 	}
 
@@ -70,13 +79,13 @@ public class helperTest {
 		Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
 		Date oggi = calendar.getTime();
 
-		PubblicazioneATM p = new PubblicazioneATM();
-		p.setTitolo("Primo tentativo");
-		p.setDescrizione("Primo tentativo di inserimento su Albo");
-		p.setInizioconsultazione(oggi);
-		p.setDurataconsultazione(10);
-		p.setRichiedente("Comune di Riva del Garda");
-		p.setTipoatto("Determine");
+		PubblicazioneATM pubblicazione = new PubblicazioneATM();
+		pubblicazione.setTitolo("Test con allegato 2");
+		pubblicazione.setDescrizione("Usa uno stram non un file");
+		pubblicazione.setDataatto(oggi);
+		pubblicazione.setDurataconsultazione(10);
+		pubblicazione.setRichiedente("Comune di Riva del Garda");
+		pubblicazione.setTipoatto("Determine");
 
 		PutAttoHelper helper = new PutAttoHelper();
 
@@ -88,18 +97,32 @@ public class helperTest {
 				ctx.getProperty(ATMClient.WSAKEY),
 				ctx.getProperty(ATMClient.ENDPOINT));
 
-		List<AllegatoATM> allegati = new ArrayList<AllegatoATM>();
+		FileATM fileATMAtto = new FileATM();
+		fileATMAtto.setTitoloallegato(pubblicazione.getTitolo());
+		File fileAtto = new File("atto.pdf");
+		if (fileAtto.exists()) {
+			fileATMAtto.setFileallegato(new FileInputStream(fileAtto));
+			fileATMAtto.setFileallegatoname("atto.pdf");
+			pubblicazione.setFileAtto(fileATMAtto);
+		} else {
+			Assert.assertTrue("File atto.pdf not exists", false);
+		}
+		
+		List<FileATM> allegati = new ArrayList<FileATM>();
+        FileATM fileATMAllegato = new FileATM();
+        fileATMAllegato.setTitoloallegato(pubblicazione.getTitolo());
+        File fileAllegato = new File("allegato.pdf");
+        if (fileAllegato.exists()) {
+            fileATMAllegato.setFileallegato(new FileInputStream(fileAllegato));
+            fileATMAllegato.setFileallegatoname("allegato.pdf");
+            allegati.add(fileATMAllegato);
+        } else {
+            Assert.assertTrue("File allegato.pdf not exists", false);
+        }
+        pubblicazione.setAllegati(allegati);
 
-		AllegatoATM allegato = new AllegatoATM();
-		allegato.setTitoloallegato("Allegato di prova");
-
-		allegato.setFileallegato(new File("allegato.txt"));
-
-		allegati.add(allegato);
-
-		helper.putAtto(p, allegati);
-
-		Assert.assertTrue(true);
+		Assert.assertTrue(helper.putAtto(pubblicazione));
 
 	}
+
 }

@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub;
 import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub.GetTokenResponse;
 import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub.PutAtto;
@@ -14,6 +16,8 @@ import com.axiastudio.suite.plugins.atm.wsa.putatto.PutAttoServiceStub.PutAttoRe
 
 public class PutAttoClient extends ATMClient {
 
+	private Logger log = Logger.getLogger(PutAttoClient.class);
+	
 	private String endpoint = "";
 
 	private PutAttoServiceStub srv = null;
@@ -50,7 +54,7 @@ public class PutAttoClient extends ATMClient {
 				token = response.get_return();
 			}
 
-			System.out.println("\nToken: " + token);
+			log.debug("\nToken: " + token);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -61,8 +65,9 @@ public class PutAttoClient extends ATMClient {
 	 * 
 	 * @throws Exception
 	 */
-	public void putAtto(Map attoMap) throws Exception {
+	public boolean putAtto(Map attoMap) throws Exception {
 
+		boolean toReturn = false;
 		PutAtto atto = new PutAtto();
 
 		try {
@@ -72,17 +77,21 @@ public class PutAttoClient extends ATMClient {
 			PutAttoResponse response = srv.putAtto(atto);
 
 			if (checkResponseError(response.get_return())) {
-				System.out.println("Error: " + response.get_return());
+				log.debug("Error: " + response.get_return());
 				throw new Exception(response.get_return());
 			} else {
-				System.out.println("Atto sent: " + response.get_return());
+				log.debug("Atto sent: " + response.get_return());
 			}
 
+			toReturn = true;
+			
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
+		return toReturn;
+		
 	}
 
 	/**
@@ -95,11 +104,10 @@ public class PutAttoClient extends ATMClient {
 		StringBuffer json = new StringBuffer();
 
 		boolean bAltroEnteAtto = false;
-		String sAltroEnteAtto = "";
-//		String sAltroEnteAtto = (String) attoMap.get("s_altroenteatto");
-//		if (sAltroEnteAtto != null && !"".equals(sAltroEnteAtto)) {
-//			bAltroEnteAtto = true;
-//		}
+		String sAltroEnteAtto = (String) attoMap.get("s_altroenteatto");
+		if (sAltroEnteAtto != null && !"".equals(sAltroEnteAtto)) {
+			bAltroEnteAtto = true;
+		}
 
 		json.append("{\"d_dataatto\":\"")
 				.append(formatDate((Date) attoMap.get("d_dataatto")))
@@ -127,18 +135,20 @@ public class PutAttoClient extends ATMClient {
 			json.append(",\"s_estensioneatto\":\"")
 					.append((String) attoMap.get("s_estensioneatto"))
 					.append("\",\"f_fileatto\":\"")
-					.append((String) attoMap.get("f_fileatto"))
-					.append("\"");
+					.append((String) attoMap.get("f_fileatto")).append("\"");
 		}
 
-		if (attoMap.containsKey("s_allegati")) {
-			json.append(",\"s_allegati\": ").append(
-					(String) attoMap.get("s_allegati"));
+		if (attoMap.containsKey("s_allegati")
+				&& !((String) attoMap.get("s_allegati")).equals("{}")) {
+			json.append(",\"s_allegati\": ")
+					.append((String) attoMap.get("s_allegati"))
+					.append(",\"n_numallegatiatto\":\"")
+					.append(attoMap.get("n_numallegatiatto")).append("\"");
 		}
 
 		json.append("}");
-
-		System.out.println("Serialized JSON:\n" + json.toString());
+		
+		log.debug("Serialized JSON:\n" + json.toString());
 
 		return json.toString();
 	}

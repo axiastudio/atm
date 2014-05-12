@@ -7,7 +7,7 @@ import java.io.InputStream;
  * Date: 20/01/14
  * Time: 19:58
  */
-public class AllegatoATM {
+public class FileATM {
 
 
     // private File fileallegato;

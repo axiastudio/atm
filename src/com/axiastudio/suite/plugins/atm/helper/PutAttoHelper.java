@@ -1,30 +1,26 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
-import java.io.DataInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.axiastudio.suite.plugins.atm.AllegatoATM;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.log4j.Logger;
+
+import com.axiastudio.suite.plugins.atm.FileATM;
 import com.axiastudio.suite.plugins.atm.PubblicazioneATM;
 import com.axiastudio.suite.plugins.atm.ws.ATMClient;
 import com.axiastudio.suite.plugins.atm.ws.PutAttoClient;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
-
 public class PutAttoHelper {
 
-	/*private static final String[] attoAttributes = new String[] { "dataatto",
-			"numeroatto", "datapubblicazioneatto", "datascadenzaatto",
-			"durataatto", "titoloatto", "oggettoatto", "tipoatto", "fileatto",
-			"statoatto", "dataannullamentoatto", "motivoannullamentoatto",
-			"responsabileatto", "progressivoatto", "datarevocaatto",
-			"peraltroenteatto", "altroenteatto", "enteatto", "entedescatto",
-			"annoatto", "numeroallegatiatto" };
-*/
+	private Logger log = Logger.getLogger(PutAttoHelper.class);
+	
 	private Map<String, String> context = null;
 	private static PutAttoClient pac = null;
 
@@ -49,34 +45,31 @@ public class PutAttoHelper {
 		return pac;
 	}
 
-	public void putAtto(PubblicazioneATM pubblicazione, List<AllegatoATM> files) {
+	public boolean putAtto(PubblicazioneATM pubblicazione) {
 
-		Map<String, Object> atto = fillAttoFromPubblicazione(pubblicazione,
-				files);
+		boolean toReturn = false;
+
+		Map<String, Object> atto = fillAttoFromPubblicazione(pubblicazione);
 
 		try {
 
-			getPutAttoClientInstance().putAtto(atto);
+			toReturn = getPutAttoClientInstance().putAtto(atto);
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 
-	}
-
-	public void putAtto(PubblicazioneATM pubblicazione) {
-
-		putAtto(pubblicazione, null);
+		log.debug("Result of putatto: " + toReturn);
+		
+		return toReturn;
 
 	}
 
-	private Map<String, Object> fillAttoFromPubblicazione(
-			PubblicazioneATM pubblicazione, List<AllegatoATM> files) {
+	private Map<String, Object> fillAttoFromPubblicazione(PubblicazioneATM pubblicazione) {
 
 		Map<String, Object> atto = new HashMap<String, Object>();
 
-		atto.put("d_dataatto", pubblicazione.getInizioconsultazione());
+		atto.put("d_dataatto", pubblicazione.getDataatto());
 
 		atto.put("n_durataatto", pubblicazione.getDurataconsultazione());
 
@@ -88,11 +81,44 @@ public class PutAttoHelper {
 
 		atto.put("s_altroenteatto", pubblicazione.getRichiedente());
 
-		if (files != null) {
-			atto.put("s_allegati", marshalingFiles(files));
+		if (pubblicazione.getFileAtto() != null) {
+			FileATM fa = pubblicazione.getFileAtto();
+
+			atto.put(
+					"s_estensioneatto",
+					fa.getFileallegatoname().substring(
+							fa.getFileallegatoname().indexOf('.') + 1));
+
+			atto.put(
+					"f_fileatto",
+					marshalingFileAtto(fa));
+		}
+
+        List<FileATM> allegati = pubblicazione.getAllegati();
+        if (allegati != null && allegati.size()>0) {
+			atto.put("s_allegati", marshalingFiles(allegati));
+			atto.put("n_numallegatiatto", allegati.size());
 		}
 
 		return atto;
+	}
+
+	private String marshalingFileAtto(FileATM fa) {
+
+		try {
+
+			return new String(Base64.encodeBase64(loadBytesFile(
+					fa.getFileallegato()), false));
+
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
 	}
 
 	/**
@@ -100,7 +126,7 @@ public class PutAttoHelper {
 	 * @param files
 	 * @return
 	 */
-	private String marshalingFiles(List<AllegatoATM> files) {
+	private String marshalingFiles(List<FileATM> files) {
 		StringBuffer marshaledFile = new StringBuffer();
 
 		if (files.size() == 0) {
@@ -109,28 +135,22 @@ public class PutAttoHelper {
 
 		marshaledFile.append("[");
 
-		for (Iterator<AllegatoATM> i = files.iterator(); i.hasNext();) {
-			AllegatoATM a = i.next();
+		for (Iterator<FileATM> i = files.iterator(); i.hasNext();) {
+			FileATM a = i.next();
 			String fileExtension = a.getFileallegatoname().substring(
-					a.getFileallegatoname().indexOf('.'));
+					a.getFileallegatoname().indexOf('.')+1);
 
 			try {
 
-				StringBuffer buffer = new StringBuffer();
-				DataInputStream dis = new DataInputStream(
-						a.getFileallegato());
-				int c = -1;
-				while((c = dis.read()) != -1) {
-					buffer.append((char)c);
-				}
-				dis.close();
-
-				marshaledFile.append("{\"s_titoloallegato\":\"")
+				// Base64 with second params if less than 4 no newlines
+				marshaledFile
+						.append("{\"s_titoloallegato\":\"")
 						.append(a.getTitoloallegato())
 						.append("\",\"s_estensioneallegato\":\"")
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
-						.append(Base64.encode(buffer.toString().getBytes())).append("\"}");
+						.append(new String(Base64.encodeBase64(loadBytesFile(
+								a.getFileallegato()), false))).append("\"}");
 
 				if (i.hasNext()) {
 					marshaledFile.append(",");
@@ -147,10 +167,34 @@ public class PutAttoHelper {
 		}
 
 		marshaledFile.append("]");
+		
+		log.debug("JSON File allegati:\n|" + marshaledFile.toString() + "|");
 
-		System.out.println("JSON File allegati:\n" + marshaledFile.toString());
+		return "\"" + marshaledFile.toString().replaceAll("\"","\\\\\"") + "\"";
 
-		return marshaledFile.toString();
 	}
 
+	private byte[] loadBytesFile(InputStream is) throws IOException {
+	
+		byte[] buff = new byte[1024];
+		ByteArrayOutputStream bais = new ByteArrayOutputStream();
+		int bRead = 0;
+	
+		while((bRead = is.read(buff)) > 0) {
+			
+			if (bRead > Integer.MAX_VALUE) {
+				log.error("The stream is too large");
+				return null;
+			}
+
+			bais.write(buff);
+		}
+		
+		is.close();
+		bais.close();
+		
+		return bais.toByteArray();
+		
+	}
+	
 }
