@@ -1,13 +1,7 @@
 package com.axiastudio.suite.plugins.atm.helper;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.log4j.Logger;
@@ -108,7 +102,7 @@ public class PutAttoHelper {
 		try {
 
 			return new String(Base64.encodeBase64(loadBytesFile(
-					fa.getFileallegato()), false));
+					fa.getFileallegato())));
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -150,7 +144,7 @@ public class PutAttoHelper {
 						.append(fileExtension)
 						.append("\",\"f_fileallegato\":\"")
 						.append(new String(Base64.encodeBase64(loadBytesFile(
-								a.getFileallegato()), false))).append("\"}");
+								a.getFileallegato())))).append("\"}");
 
 				if (i.hasNext()) {
 					marshaledFile.append(",");
@@ -174,27 +168,18 @@ public class PutAttoHelper {
 
 	}
 
-	private byte[] loadBytesFile(InputStream is) throws IOException {
-	
-		byte[] buff = new byte[1024];
-		ByteArrayOutputStream bais = new ByteArrayOutputStream();
-		int bRead = 0;
-	
-		while((bRead = is.read(buff)) > 0) {
-			
-			if (bRead > Integer.MAX_VALUE) {
-				log.error("The stream is too large");
-				return null;
-			}
 
-			bais.write(buff);
-		}
-		
-		is.close();
-		bais.close();
-		
-		return bais.toByteArray();
-		
-	}
+    private byte[] loadBytesFile(InputStream in) throws IOException {
+        byte[] bytes = new byte[1024];
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int read = 0;
+        while( (read=in.read(bytes)) != -1){
+            out.write(Arrays.copyOfRange(bytes, 0, read));
+        }
+        in.close();
+        out.flush();
+        out.close();
+        return out.toByteArray();
+    }
 	
 }
