@@ -32,12 +32,16 @@ public class helperTest {
 		Date oggi = calendar.getTime();
 
 		PubblicazioneATM p = new PubblicazioneATM();
-		p.setTitolo("Altro tentativo");
-		p.setDescrizione("Ulteriore tentativo di inserimento su Albo");
+		p.setTitolo("Verifica inserimento titolo");
+		p.setDescrizione("Test con atto numero 7 di ieri " + new Date());
 		// p.setInizioconsultazione(oggi);
 		p.setDurataconsultazione(10);
 		p.setRichiedente("Comune di Riva del Garda");
 		p.setTipoatto("Determine");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        p.setDataatto(cal.getTime());
+        p.setNumeroatto(7);
 
 		PutAttoHelper helper = new PutAttoHelper();
 
