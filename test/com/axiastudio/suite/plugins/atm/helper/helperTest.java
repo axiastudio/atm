@@ -32,7 +32,6 @@ public class helperTest {
 		Date oggi = calendar.getTime();
 
 		PubblicazioneATM p = new PubblicazioneATM();
-		p.setTitolo("Verifica inserimento titolo");
 		p.setDescrizione("Test con atto numero 7 di ieri " + new Date());
 		// p.setInizioconsultazione(oggi);
 		p.setDurataconsultazione(10);
@@ -84,8 +83,7 @@ public class helperTest {
 		Date oggi = calendar.getTime();
 
 		PubblicazioneATM pubblicazione = new PubblicazioneATM();
-		pubblicazione.setTitolo("Test con allegato 2");
-		pubblicazione.setDescrizione("Usa uno stram non un file");
+		pubblicazione.setDescrizione("Test con atto e allegato");
 		pubblicazione.setDataatto(oggi);
 		pubblicazione.setDurataconsultazione(10);
 		pubblicazione.setRichiedente("Comune di Riva del Garda");
@@ -102,7 +100,7 @@ public class helperTest {
 				ctx.getProperty(ATMClient.ENDPOINT));
 
 		FileATM fileATMAtto = new FileATM();
-		fileATMAtto.setTitoloallegato(pubblicazione.getTitolo());
+		fileATMAtto.setTitoloallegato("documento atto");
 		File fileAtto = new File("atto.pdf");
 		if (fileAtto.exists()) {
 			fileATMAtto.setFileallegato(new FileInputStream(fileAtto));
@@ -114,7 +112,7 @@ public class helperTest {
 		
 		List<FileATM> allegati = new ArrayList<FileATM>();
         FileATM fileATMAllegato = new FileATM();
-        fileATMAllegato.setTitoloallegato(pubblicazione.getTitolo());
+        fileATMAllegato.setTitoloallegato("documento allegato");
         File fileAllegato = new File("allegato.pdf");
         if (fileAllegato.exists()) {
             fileATMAllegato.setFileallegato(new FileInputStream(fileAllegato));

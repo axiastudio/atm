@@ -69,8 +69,6 @@ public class PutAttoHelper {
 
 		atto.put("n_durataatto", pubblicazione.getDurataconsultazione());
 
-		atto.put("s_titoloatto", pubblicazione.getTitolo());
-
 		atto.put("s_oggettoatto", pubblicazione.getDescrizione());
 
 		atto.put("s_tipoatto", pubblicazione.getTipoatto());
