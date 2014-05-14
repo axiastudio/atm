@@ -65,6 +65,8 @@ public class PutAttoHelper {
 
 		atto.put("d_dataatto", pubblicazione.getDataatto());
 
+        atto.put("s_numeroatto", pubblicazione.getNumeroatto());
+
 		atto.put("n_durataatto", pubblicazione.getDurataconsultazione());
 
 		atto.put("s_titoloatto", pubblicazione.getTitolo());

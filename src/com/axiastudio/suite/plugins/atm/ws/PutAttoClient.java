@@ -2,6 +2,7 @@ package com.axiastudio.suite.plugins.atm.ws;
 
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -109,26 +110,34 @@ public class PutAttoClient extends ATMClient {
 			bAltroEnteAtto = true;
 		}
 
-		json.append("{\"d_dataatto\":\"")
-				.append(formatDate((Date) attoMap.get("d_dataatto")))
-				.append("\",\"d_datapubblicazioneatto\":\"")
-				.append(formatDate((Date) attoMap
-						.get("d_datapubblicazioneatto")))
-				.append("\",\"d_datascadenzaatto\":\"")
-				.append(formatDate((Date) attoMap.get("d_datascadenzaatto")))
-				.append("\",\"s_durataatto\":\"")
+        json.append("{\"d_dataatto\":\"")
+                .append(formatDate((Date) attoMap.get("d_dataatto")));
+
+                if( attoMap.get("s_numeroatto") != null ) {
+                    json.append("\",\"s_numeroatto\":\"")
+                    .append(attoMap.get("s_numeroatto"));
+                }
+
+				json.append("\",\"s_durataatto\":\"")
 				.append((Integer) attoMap.get("n_durataatto"))
+
 				.append("\",\"s_titoloatto\":\"")
 				.append((String) attoMap.get("s_titoloatto"))
+
 				.append("\",\"s_oggettoatto\":\"")
 				.append((String) attoMap.get("s_oggettoatto"))
+
 				.append("\",\"s_tipoatto\":\"")
 				.append((String) attoMap.get("s_tipoatto"))
+
 				.append("\",\"s_statoatto\":\"")
 				.append("pubblicazione")
+
 				.append("\",\"b_peraltroenteatto\":\"").append(bAltroEnteAtto)
+
 				.append("\"").append(",\"s_altroenteatto\":\"")
 				.append(sAltroEnteAtto)
+
 				.append("\",\"b_immediatoatto\":\"true\"");
 
 		if (attoMap.containsKey("f_fileatto")) {
@@ -162,10 +171,10 @@ public class PutAttoClient extends ATMClient {
 	 * @return
 	 */
 	private String formatDate(Date d) {
-		return String.format("%1$td/%1$tm/%1$tY",
-				Calendar.getInstance(Locale.ITALIAN));
-		// return String.format("%1$tY/%1$tm/%1$td",
-		// Calendar.getInstance(Locale.ITALIAN));
+        Calendar calendar = Calendar.getInstance(Locale.ITALIAN);
+        calendar.setTime(d);
+        String s = (new SimpleDateFormat("dd/MM/yyyy")).format(calendar.getTime());
+        return s;
 	}
 
 }
