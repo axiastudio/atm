@@ -121,6 +121,9 @@ public class PutAttoClient extends ATMClient {
 				json.append("\",\"s_durataatto\":\"")
 				.append((Integer) attoMap.get("n_durataatto"))
 
+                .append("\",\"s_organo\":\"")
+                .append((String) attoMap.get("s_organo"))
+
 				.append("\",\"s_oggettoatto\":\"")
 				.append((String) attoMap.get("s_oggettoatto"))
 
