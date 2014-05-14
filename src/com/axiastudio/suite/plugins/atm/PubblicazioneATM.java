@@ -10,8 +10,6 @@ import java.util.List;
  */
 public class PubblicazioneATM {
 
-
-    private String titolo;
     private String descrizione;
     private Date dataatto;
     private Integer numeroatto;
@@ -20,14 +18,6 @@ public class PubblicazioneATM {
     private String tipoatto;
 	private FileATM fileAtto;
     private List<FileATM> allegati;
-
-    public void setTitolo(String titolo) {
-        this.titolo = titolo;
-    }
-
-    public String getTitolo() {
-        return titolo;
-    }
 
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;

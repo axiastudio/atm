@@ -121,17 +121,11 @@ public class PutAttoClient extends ATMClient {
 				json.append("\",\"s_durataatto\":\"")
 				.append((Integer) attoMap.get("n_durataatto"))
 
-				.append("\",\"s_titoloatto\":\"")
-				.append((String) attoMap.get("s_titoloatto"))
-
 				.append("\",\"s_oggettoatto\":\"")
 				.append((String) attoMap.get("s_oggettoatto"))
 
 				.append("\",\"s_tipoatto\":\"")
 				.append((String) attoMap.get("s_tipoatto"))
-
-				.append("\",\"s_statoatto\":\"")
-				.append("pubblicazione")
 
 				.append("\",\"b_peraltroenteatto\":\"").append(bAltroEnteAtto)
 
