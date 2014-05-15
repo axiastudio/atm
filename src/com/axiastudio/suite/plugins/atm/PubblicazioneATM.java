@@ -15,6 +15,7 @@ public class PubblicazioneATM {
     private Integer numeroatto;
     private Integer durataconsultazione;
     private String richiedente;
+    private String organo;
     private String tipoatto;
 	private FileATM fileAtto;
     private List<FileATM> allegati;
@@ -57,6 +58,14 @@ public class PubblicazioneATM {
 
     public String getRichiedente() {
         return richiedente;
+    }
+
+    public String getOrgano() {
+        return organo;
+    }
+
+    public void setOrgano(String organo) {
+        this.organo = organo;
     }
 
     public void setTipoatto(String tipoatto) {

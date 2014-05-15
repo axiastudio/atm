@@ -71,6 +71,8 @@ public class PutAttoHelper {
 
 		atto.put("s_oggettoatto", pubblicazione.getDescrizione());
 
+        atto.put("s_organo", pubblicazione.getOrgano());
+
 		atto.put("s_tipoatto", pubblicazione.getTipoatto());
 
 		atto.put("s_altroenteatto", pubblicazione.getRichiedente());

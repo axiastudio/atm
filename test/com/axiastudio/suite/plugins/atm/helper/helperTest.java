@@ -32,7 +32,7 @@ public class helperTest {
 		Date oggi = calendar.getTime();
 
 		PubblicazioneATM p = new PubblicazioneATM();
-		p.setDescrizione("Test con atto numero 7 di ieri " + new Date());
+		p.setDescrizione("Test con organo e atto numero 7 di ieri " + new Date());
 		// p.setInizioconsultazione(oggi);
 		p.setDurataconsultazione(10);
 		p.setRichiedente("Comune di Riva del Garda");
@@ -41,6 +41,7 @@ public class helperTest {
         cal.add(Calendar.DATE, -1);
         p.setDataatto(cal.getTime());
         p.setNumeroatto(7);
+        p.setOrgano("ORGANO RICHIEDENTE");
 
 		PutAttoHelper helper = new PutAttoHelper();
 
