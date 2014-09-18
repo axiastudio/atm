@@ -135,7 +135,7 @@ public class PutAttoClient extends ATMClient {
 				.append("\"").append(",\"s_altroenteatto\":\"")
 				.append(sAltroEnteAtto)
 
-				.append("\",\"b_immediatoatto\":\"true\"");
+				.append("\",\"b_immediatoatto\":\"false\"");
 
 		if (attoMap.containsKey("f_fileatto")) {
 			json.append(",\"s_estensioneatto\":\"")
