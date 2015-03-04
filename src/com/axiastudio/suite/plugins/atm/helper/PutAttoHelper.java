@@ -83,7 +83,7 @@ public class PutAttoHelper {
 			atto.put(
 					"s_estensioneatto",
 					fa.getFileallegatoname().substring(
-							fa.getFileallegatoname().indexOf('.') + 1));
+							fa.getFileallegatoname().lastIndexOf('.') + 1));
 
 			atto.put(
 					"f_fileatto",
@@ -134,7 +134,7 @@ public class PutAttoHelper {
 		for (Iterator<FileATM> i = files.iterator(); i.hasNext();) {
 			FileATM a = i.next();
 			String fileExtension = a.getFileallegatoname().substring(
-					a.getFileallegatoname().indexOf('.')+1);
+					a.getFileallegatoname().lastIndexOf('.')+1);
 
 			try {
 
